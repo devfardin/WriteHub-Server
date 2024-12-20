@@ -8,3 +8,7 @@ const blogValidationSchema = z.object({
     isPublished: z.boolean(),
   }),
 });
+
+export const BlogValidation = {
+  blogValidationSchema,
+};
