@@ -10,7 +10,6 @@ const createNewUserIntoDB = catchAsync(async (req, res) => {
     success: true,
     message: 'User registered successfully',
     data: {
-      _id: result?._id,
       name: result?.name,
       email: result?.email,
     },

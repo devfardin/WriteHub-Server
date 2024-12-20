@@ -4,5 +4,6 @@ export type TBlog = {
   title: string,
   content: string,
   author: Types.ObjectId,
+  // author: string,
   isPublished: boolean,
 };

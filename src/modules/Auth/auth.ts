@@ -8,6 +8,7 @@ import config from '../../app/config';
 const auth = (...requireRole: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
+
     // check for authorize user
     if (!token) {
       throw new AppError(
@@ -28,6 +29,7 @@ const auth = (...requireRole: TUserRole[]) => {
         }
         // check for user have valid  role for this token
         const role = (decoded as JwtPayload).role;
+
         if (requireRole && !requireRole.includes(role)) {
           throw new AppError(
             StatusCodes.UNAUTHORIZED,

@@ -28,7 +28,6 @@ const UserSchema = new Schema<TUser>(
         values: ['admin', 'user'],
         message: '{VALUE} is not Assignable to user',
       },
-      select: 0,
       default: 'user',
     },
     isBlocked: {
