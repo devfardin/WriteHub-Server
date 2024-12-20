@@ -3,6 +3,7 @@ import AppError from '../../app/errors/AppError';
 import { UserModel } from '../User/user.model';
 import { TLoginUser } from './auth.interface';
 import jwt from 'jsonwebtoken';
+
 import config from '../../app/config';
 const loginUser = async (payload: TLoginUser) => {
   const isUser = await UserModel.isUserExistsByCustomEmail(payload.email);
@@ -16,7 +17,7 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(StatusCodes.FORBIDDEN, 'User Is Blocked');
   }
   // checking is the password is correct
-  if (!(await UserModel.isPasswordMatch(payload.password, isUser?.passoword))) {
+  if (!(await UserModel.isPasswordMatch(payload.password, isUser?.password))) {
     throw new AppError(StatusCodes.UNAUTHORIZED, 'Invalid credentials');
   }
   // Create Token and send user

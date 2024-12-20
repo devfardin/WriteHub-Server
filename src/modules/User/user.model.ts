@@ -15,7 +15,7 @@ const UserSchema = new Schema<TUser>(
       required: [true, 'Email Address is Required'],
       unique: true,
     },
-    passoword: {
+    password: {
       type: String,
       required: [true, 'Password is Required'],
       trim: true,
@@ -44,8 +44,8 @@ const UserSchema = new Schema<TUser>(
 
 UserSchema.pre('save', async function (next) {
   const user = this as TUser;
-  user.passoword = await bcrypt.hash(
-    user.passoword,
+  user.password = await bcrypt.hash(
+    user.password,
     Number(config.password_secure),
   );
   next();
@@ -58,7 +58,7 @@ UserSchema.statics.isPasswordMatch = async function (
 ) {
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
-UserSchema.statics.isUserExistsByCustomEmail = async function (id: string) {
-  return await UserModel.findOne({ id }).select('+password'); // + for get all user fileds
+UserSchema.statics.isUserExistsByCustomEmail = async function (email: string) {
+  return await UserModel.findOne({ email }).select('+password'); // + for get all user fileds
 };
 export const UserModel = model<TUser, User>('Users', UserSchema);

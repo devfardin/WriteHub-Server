@@ -5,7 +5,7 @@ import { USER_ROLE } from './user.constant';
 export type TUser = {
   name: string,
   email: string,
-  passoword: string,
+  password: string,
   role: string,
   isBlocked: boolean,
 };
