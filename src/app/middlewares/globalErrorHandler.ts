@@ -57,7 +57,6 @@ const globalErrorHandle: ErrorRequestHandler = (error, req, res, next) => {
       },
     ];
   }
-
   // return all type of error
   res.status(statusCode).json({
     success: false,
@@ -66,5 +65,4 @@ const globalErrorHandle: ErrorRequestHandler = (error, req, res, next) => {
     stack: config.NODE_ENV === 'Development' ? error.stack : null,
   });
 };
-
 export default globalErrorHandle;
