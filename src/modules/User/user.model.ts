@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { TUser } from './user.interface';
+import { TUser, User } from './user.interface';
 import bcrypt from 'bcrypt';
 import config from '../../app/config';
 const UserSchema = new Schema<TUser>(
@@ -51,4 +51,14 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-export const UserModel = model<TUser>('Users', UserSchema);
+// Match Password in database that your provided
+UserSchema.statics.isPasswordMatch = async function (
+  plainTextPassword,
+  hashedPassword,
+) {
+  return await bcrypt.compare(plainTextPassword, hashedPassword);
+};
+UserSchema.statics.isUserExistsByCustomEmail = async function (id: string) {
+  return await UserModel.findOne({ id }).select('+password'); // + for get all user fileds
+};
+export const UserModel = model<TUser, User>('Users', UserSchema);
