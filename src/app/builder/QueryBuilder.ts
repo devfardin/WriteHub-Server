@@ -9,33 +9,38 @@ class QueryBuilder<T> {
         (this.modelQuery = modelQuery);
         (this.query = query)
     }
-    search(searchAbleFields: string[]) {
-        const search = this?.query?.search;
+    search(searchableFields: string[]) {
+        const search = this?.query?.search
         if (search) {
             this.modelQuery = this.modelQuery.find({
-                $or: searchAbleFields.map((fields) => ({
-                    [fields]: { $regex: search, $options: 'i' }
-                }) as FilterQuery<T>)
-            })
+                $or: searchableFields.map((field) => ({
+                    [field]: { $regex: search, $options: 'i' },
+                }) as FilterQuery<T>),
+            });
         }
         return this;
     }
+
     filter() {
+        // Filtering
         const queryObj = { ...this.query };
-        const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-        excludeFields.forEach((item) => delete queryObj[item]);
-        this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>
-        )
-        return this;
+        const excludeFields = ['search', 'sortBy', 'sortOrder'];
+        excludeFields.forEach((el) => delete queryObj[el]);
+        if(queryObj.filter){
+            this.modelQuery = this.modelQuery.find({ author: queryObj.filter as FilterQuery<T> });
+        }
+        return this
     }
+
     sortBy() {
-        const sortBy = (this.query.sort as string)?.split(',')?.join(' ') || '-createdAt';
-        this.modelQuery = this.modelQuery.sort(sortBy as string)
+         const sort = (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAt';
+        this.modelQuery = this.modelQuery.sort(sort as string)
         return this;
     }
     sortOrder() {
-        const sortOrder = this.query.order === 'asc' ? '' : '-'; // Default to 'desc'
-        this.modelQuery = this.modelQuery.sort(sortOrder);
+        const sortField = this.query.sort || '-createdAt';
+        const sortOrder = this.query.sortOrder === 'asc' ? '' : '-';
+        this.modelQuery = this.modelQuery.sort(`${sortOrder}${sortField}`);
         return this;
     }
 }

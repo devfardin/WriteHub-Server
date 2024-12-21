@@ -5,6 +5,8 @@ import { BlogModel } from './blog.model';
 import AppError from '../../app/errors/AppError';
 import { StatusCodes } from 'http-status-codes';
 import { UserModel } from '../User/user.model';
+import QueryBuilder from '../../app/builder/QueryBuilder';
+import { BlogSearchAbleFields } from './blog.constant';
 
 const createBlogIntoDB = async (payload: TBlog, id: string) => {
   payload.author = new mongoose.Types.ObjectId(id);
@@ -45,8 +47,12 @@ const updateBlogIntoDB = async (
 };
 
 // get all the blog from database
-const getAllBlogFromDB = async () => {
-  const result = await BlogModel.find().populate('author', 'name email');
+const getAllBlogFromDB = async (query: Record<string, unknown>) => {
+  const blogQuery = new QueryBuilder(BlogModel.find().populate('author'), query)
+    .search(BlogSearchAbleFields)
+    .filter()
+    .sortBy();
+  const result = await blogQuery.modelQuery;
   return result;
 };
 

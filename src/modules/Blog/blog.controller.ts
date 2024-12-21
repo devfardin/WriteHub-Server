@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../app/utils/catchAsync';
 import sendResponse from '../../app/utils/sendResponse';
@@ -64,12 +65,12 @@ const updateBlogIntoDB = catchAsync(async (req, res) => {
 const getAllBlogFromDB = catchAsync(async (req, res) => {
   // const authorInfo = await UserModel.findById(req.user.id);
 
-  const result = await BlogServices.getAllBlogFromDB();
+  const result = await BlogServices.getAllBlogFromDB(req?.query);
   sendResponse(res, {
     success: true,
     message: 'Blogs fetched successfully',
     statusCode: StatusCodes.OK,
-    data: result.map((blog) => ({
+    data: result?.map((blog: any) => ({
       _id: blog?._id,
       title: blog?.title,
       content: blog?.content,
