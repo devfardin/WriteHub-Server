@@ -11,11 +11,14 @@ const createBlogIntoDB = async (payload: TBlog, id: string) => {
   const result = await BlogModel.create(payload);
   return result;
 };
+
+// User can  update their own blog by its ID.
 const updateBlogIntoDB = async (
   payload: TBlog,
   blogId: string,
   userInfo: any,
 ) => {
+  // get the blog by id
   const blog = await BlogModel.findById(blogId);
   if (!blog?.author) {
     throw new AppError(
@@ -23,22 +26,51 @@ const updateBlogIntoDB = async (
       'Author information not found for this blog.',
     );
   }
+  // get user for validate there own blog
   const author = await UserModel.findById(blog?.author);
   const authorEmail = userInfo.email;
   const blogEmail = author?.email;
   if (authorEmail !== blogEmail) {
     throw new AppError(
       StatusCodes.CONFLICT,
-      `You are not authorized to update another author's post`,
+      `You are not authorized to update another author's blog`,
     );
   }
+  // blog update function
   const result = await BlogModel.findByIdAndUpdate(blogId, payload, {
     new: true,
     runValidators: true,
   });
   return result;
 };
+
+// User can  Delete their own blog by its ID.
+const deleteBlogFromDB = async (blogId: string, userInfo: any) => {
+  // get the blog by id
+  const blog = await BlogModel.findById(blogId);
+  if (!blog?.author) {
+    throw new AppError(
+      StatusCodes.NOT_FOUND,
+      'Author information not found for this blog.',
+    );
+  }
+  // get user for validate there own blog
+  const author = await UserModel.findById(blog?.author);
+  const authorEmail = userInfo.email;
+  const blogEmail = author?.email;
+  if (authorEmail !== blogEmail) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      `You are not authorized to delete another author's blog`,
+    );
+  }
+  // blog update function
+  const result = await BlogModel.findByIdAndDelete(blogId);
+  return result;
+};
+
 export const BlogServices = {
   createBlogIntoDB,
   updateBlogIntoDB,
+  deleteBlogFromDB,
 };
