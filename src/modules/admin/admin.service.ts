@@ -4,6 +4,7 @@ import { UserModel } from '../User/user.model';
 import { JwtPayload } from 'jsonwebtoken';
 import { BlogModel } from '../Blog/blog.model';
 
+// blocked any user only admin action
 const userUpdateIntoBD = async (userId: string, currentUser: JwtPayload) => {
   if (currentUser.role !== 'admin') {
     throw new AppError(
@@ -28,7 +29,7 @@ const userUpdateIntoBD = async (userId: string, currentUser: JwtPayload) => {
   );
   return result;
 };
-
+// Delete any blog only admin action
 const deleteBlogFromDB = async (blogId: string, currentUser: JwtPayload) => {
   if (currentUser.role !== 'admin') {
     throw new AppError(
