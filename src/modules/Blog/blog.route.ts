@@ -4,10 +4,7 @@ import auth from '../Auth/auth';
 import { USER_ROLE } from '../User/user.constant';
 
 const router = express.Router();
-router.post(
-  '/',
-  auth(USER_ROLE.user, USER_ROLE.admin),
-  BlogController.createBlogs,
-);
+router.post('/', auth(USER_ROLE.user), BlogController.createBlogs);
+router.patch('/:blogId', auth(USER_ROLE.user), BlogController.updateBlogIntoDB);
 
 export const BlogRoutes = router;

@@ -33,7 +33,6 @@ const UserSchema = new Schema<TUser>(
     isBlocked: {
       type: Boolean,
       default: false,
-      select: 0,
     },
   },
   {

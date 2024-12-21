@@ -13,7 +13,7 @@ const auth = (...requireRole: TUserRole[]) => {
     if (!token) {
       throw new AppError(
         StatusCodes.UNAUTHORIZED,
-        'You are not authorize user !',
+        'You are not authorized user!',
       );
     }
     // check to valid token
