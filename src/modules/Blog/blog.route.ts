@@ -11,5 +11,5 @@ router.delete(
   auth(USER_ROLE.user),
   BlogController.deleteBlogFromDB,
 );
-
+router.get('/', BlogController.getAllBlogFromDB);
 export const BlogRoutes = router;

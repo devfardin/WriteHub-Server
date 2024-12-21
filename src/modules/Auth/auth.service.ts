@@ -16,7 +16,6 @@ const loginUser = async (payload: TLoginUser) => {
   if (isUser.isBlocked) {
     throw new AppError(StatusCodes.FORBIDDEN, 'User Is Blocked');
   }
-  console.log(isUser);
 
   // checking is the password is correct
   if (!(await UserModel.isPasswordMatch(payload.password, isUser?.password))) {

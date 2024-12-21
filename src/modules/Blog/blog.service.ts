@@ -44,6 +44,12 @@ const updateBlogIntoDB = async (
   return result;
 };
 
+// get all the blog from database
+const getAllBlogFromDB = async () => {
+  const result = await BlogModel.find().populate('author', 'name email');
+  return result;
+};
+
 // User can  Delete their own blog by its ID.
 const deleteBlogFromDB = async (blogId: string, userInfo: any) => {
   // get the blog by id
@@ -58,6 +64,7 @@ const deleteBlogFromDB = async (blogId: string, userInfo: any) => {
   const author = await UserModel.findById(blog?.author);
   const authorEmail = userInfo.email;
   const blogEmail = author?.email;
+
   if (authorEmail !== blogEmail) {
     throw new AppError(
       StatusCodes.CONFLICT,
@@ -73,4 +80,5 @@ export const BlogServices = {
   createBlogIntoDB,
   updateBlogIntoDB,
   deleteBlogFromDB,
+  getAllBlogFromDB,
 };
